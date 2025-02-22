@@ -13,7 +13,8 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:studio": "prisma studio",
-    "prisma:format": "prisma format"
+    "prisma:format": "prisma format",
+    "db:deploy": "npx prisma migrate deploy && npx prisma generate"
   },
   "keywords": [],
   "author": "Maxwell Olliver",
@@ -23,7 +24,9 @@
     "@fastify/env": "^5.0.2",
     "@prisma/client": "^6.3.1",
     "dotenv": "^16.4.7",
-    "fastify": "^4.26.1"
+    "fastify": "^5.2.1",
+    "pino": "^9.6.0",
+    "pino-elasticsearch": "^8.1.0"
   },
   "devDependencies": {
     "@types/node": "^22.13.1",

@@ -1,8 +1,8 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import Fastify from 'fastify';
+import 'fastify';
 
 declare module 'fastify' {
-  export interface FastifyInstance {
+  interface FastifyInstance {
     config: {
       PORT: string;
       HOST: string;

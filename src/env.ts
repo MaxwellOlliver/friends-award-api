@@ -37,6 +37,6 @@ const envOptions = {
   dotenv: true,
 };
 
-export function configureEnv(server: FastifyInstance) {
-  server.register(fastifyEnv, envOptions);
+export async function configureEnv(server: FastifyInstance) {
+  await server.register(fastifyEnv, envOptions);
 }
