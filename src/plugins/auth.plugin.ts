@@ -2,7 +2,7 @@ import fp from 'fastify-plugin';
 import { FastifyRequest, FastifyReply } from 'fastify';
 import jwt from '@fastify/jwt';
 import cookie from '@fastify/cookie';
-import { tryCatch } from '../../utils/try-catch';
+import { tryCatch } from '../utils/try-catch';
 
 export default fp(
   async (fastify) => {

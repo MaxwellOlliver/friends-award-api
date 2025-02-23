@@ -19,13 +19,13 @@ const start = async () => {
     setupLogger(server);
 
     await server.register(autoload, {
-      dir: path.join(__dirname, 'infra', 'plugins'),
+      dir: path.join(__dirname, 'plugins'),
     });
 
     await server.register(autoload, {
-      dir: join(__dirname, 'infra', 'routes'),
+      dir: join(__dirname, 'routes'),
       dirNameRoutePrefix: false,
-      indexPattern: /\.route(\.js|\.cjs|\.ts)$/i,
+      scriptPattern: /.*\.route(\.js|\.cjs|\.ts)$/i,
       options: {
         prefix: '/api',
       },
@@ -40,9 +40,6 @@ const start = async () => {
       port: parseInt(server.config.PORT, 10),
       host: server.config.HOST,
     });
-    server.log.info(
-      `Server started on ${server.config.HOST}:${server.config.PORT}`,
-    );
   } catch (err) {
     console.log(err);
     server.log.error(err);

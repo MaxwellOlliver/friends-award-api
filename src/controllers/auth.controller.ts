@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest, FastifyInstance } from 'fastify';
 import { userService } from '../services/user-service';
 import bcrypt from 'bcrypt';
-import { tryCatch } from '../../utils/try-catch';
+import { tryCatch } from '../utils/try-catch';
 
 export function authController(fastify: FastifyInstance) {
   const isSecure = fastify.config.NODE_ENV === 'production';
