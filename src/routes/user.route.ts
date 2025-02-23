@@ -6,14 +6,6 @@ export default function userRoutes(fastify: FastifyInstance) {
   const controller = userController(fastify);
 
   fastify.get(
-    '/users/me',
-    {
-      preHandler: [fastify.auth],
-    },
-    controller.getLoggedUser,
-  );
-
-  fastify.get(
     '/users/:id',
     {
       preHandler: [fastify.auth],
@@ -21,8 +13,22 @@ export default function userRoutes(fastify: FastifyInstance) {
     },
     controller.getUser,
   );
+  fastify.get(
+    '/users/me',
+    {
+      preHandler: [fastify.auth],
+    },
+    controller.getLoggedUser,
+  );
 
-  fastify.post('/users', controller.createUser);
+  fastify.post(
+    '/users',
+    {
+      preHandler: [fastify.auth],
+      schema: userRoutesSchemas.CREATE_USER,
+    },
+    controller.createUser,
+  );
 
   fastify.delete(
     '/users/:id',

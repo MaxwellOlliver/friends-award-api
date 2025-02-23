@@ -7,24 +7,24 @@ export const userService = {
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(user.password, salt);
 
-    return prisma.users.create({
+    return prisma.user.create({
       data: { ...user, password: hash },
     });
   },
   getUserByUsername: async (username: string) => {
-    return prisma.users.findUnique({
+    return prisma.user.findUnique({
       where: { username },
     });
   },
   getUserById: async (id: string) => {
-    return prisma.users.findUnique({
+    return prisma.user.findUnique({
       where: { id },
     });
   },
   updateUser: async (id: string, user: UpdateUserPayload) => {
-    return prisma.users.update({ where: { id }, data: user });
+    return prisma.user.update({ where: { id }, data: user });
   },
   deleteUser: async (id: string) => {
-    return prisma.users.delete({ where: { id } });
+    return prisma.user.delete({ where: { id } });
   },
 };

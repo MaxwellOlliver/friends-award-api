@@ -1,8 +1,9 @@
 import fp from 'fastify-plugin';
-import { FastifyRequest, FastifyReply } from 'fastify';
+import { FastifyRequest } from 'fastify';
 import jwt from '@fastify/jwt';
 import cookie from '@fastify/cookie';
 import { tryCatch } from '../utils/try-catch';
+import { HttpError, HttpErrorCodes } from '../errors/http-error';
 
 export default fp(
   async (fastify) => {
@@ -29,16 +30,17 @@ export default fp(
       return token;
     });
 
-    fastify.decorate(
-      'auth',
-      async (request: FastifyRequest, reply: FastifyReply) => {
-        const [error] = await tryCatch(request.jwtVerify());
+    fastify.decorate('auth', async (request: FastifyRequest) => {
+      const [error] = await tryCatch(request.jwtVerify());
 
-        if (error) {
-          return reply.status(401).send(error);
-        }
-      },
-    );
+      if (error) {
+        throw new HttpError(
+          HttpErrorCodes.UNAUTHORIZED,
+          'Unauthorized',
+          'UNAUTHORIZED',
+        );
+      }
+    });
   },
   {
     name: 'auth',

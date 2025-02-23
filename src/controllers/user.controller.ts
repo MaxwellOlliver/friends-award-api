@@ -1,6 +1,7 @@
 import { FastifyRequest, FastifyReply, FastifyInstance } from 'fastify';
 import { userService } from '../services/user-service';
 import { CreateUserPayload } from '../services/user-service/types';
+import { Conflict, NotFound } from '../errors/http-error';
 
 export function userController(fastify: FastifyInstance) {
   return {
@@ -15,36 +16,31 @@ export function userController(fastify: FastifyInstance) {
       const userExists = await userService.getUserByUsername(username);
 
       if (userExists) {
-        return reply.status(400).send({ message: 'Username already exists' });
+        throw new Conflict('User already exists', 'USER_ALREADY_EXISTS');
       }
 
       const user = await userService.createUser({ username, password });
 
-      const userData = {
-        ...user,
-        password: undefined,
-      };
-
-      return reply.status(201).send(userData);
+      return reply.status(201).send(user);
     },
     getUser: async (
       request: FastifyRequest<{ Params: { id: string } }>,
       reply: FastifyReply,
     ) => {
-      fastify.log.info(`Getting user: ${request.params.id}`);
+      fastify.log.info({
+        msg: `Getting user: ${request.params.id}`,
+        trace: { id: request.headers['x-trace-id'] },
+      });
 
       const user = await userService.getUserById(request.params.id);
 
       if (!user) {
-        return reply.status(404).send({ message: 'User not found' });
+        throw new NotFound('User not found', 'USER_NOT_FOUND', {
+          id: request.params.id,
+        });
       }
 
-      const userData = {
-        ...user,
-        password: undefined,
-      };
-
-      return reply.status(200).send(userData);
+      return reply.status(200).send(user);
     },
     getLoggedUser: async (request: FastifyRequest, reply: FastifyReply) => {
       fastify.log.info(`Getting logged user: ${request.user.sub}`);
@@ -52,15 +48,12 @@ export function userController(fastify: FastifyInstance) {
       const user = await userService.getUserById(request.user.sub);
 
       if (!user) {
-        return reply.status(404).send({ message: 'User not found' });
+        throw new NotFound('User not found', 'USER_NOT_FOUND', {
+          id: request.user.sub,
+        });
       }
 
-      const userData = {
-        ...user,
-        password: undefined,
-      };
-
-      return reply.status(200).send(userData);
+      return reply.status(200).send(user);
     },
     deleteUser: async (request: FastifyRequest, reply: FastifyReply) => {
       fastify.log.info(`Deleting user: ${request.user.sub}`);
