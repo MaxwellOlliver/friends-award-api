@@ -5,6 +5,10 @@ const schema = {
   type: 'object',
   required: ['PORT', 'HOST', 'DATABASE_URL'],
   properties: {
+    NODE_ENV: {
+      type: 'string',
+      default: 'development',
+    },
     PORT: {
       type: 'string',
       default: '3000',
@@ -26,6 +30,18 @@ const schema = {
       default: 'fastify_db',
     },
     DATABASE_URL: {
+      type: 'string',
+    },
+    JWT_SECRET: {
+      type: 'string',
+    },
+    JWT_EXPIRATION_TIME: {
+      type: 'string',
+    },
+    JWT_REFRESH_EXPIRATION_TIME: {
+      type: 'string',
+    },
+    JWT_COOKIE_SECRET: {
       type: 'string',
     },
   },

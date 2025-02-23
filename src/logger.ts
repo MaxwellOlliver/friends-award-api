@@ -62,8 +62,7 @@ export const setupLogger = (server: FastifyInstance) => {
 
   server.addHook('onResponse', (request, response, done) => {
     request.log.info({
-      msg: `RESPONSE: ${request.method} ${request.url}`,
-      req: request,
+      msg: `RESPONSE: ${request.method} ${response.statusCode} ${request.url}`,
       res: response,
       responseTime: response.elapsedTime,
       trace: {
