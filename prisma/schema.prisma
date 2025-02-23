@@ -1,6 +1,6 @@
 generator client {
   provider      = "prisma-client-js"
-  binaryTargets = ["linux-musl"]
+  binaryTargets = ["native", "linux-musl"]
 }
 
 datasource db {
@@ -14,6 +14,42 @@ model User {
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  Awards    Award[]
 
+  @@index([username])
   @@map("users")
+}
+
+model Award {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdBy   String
+  owner       User     @relation(fields: [createdBy], references: [id])
+
+  members AwardMember[]
+
+  @@index([createdBy])
+  @@map("awards")
+}
+
+model AwardMember {
+  id        String          @id @default(uuid())
+  awardId   String
+  userId    String
+  role      AwardMemberRole @default(MEMBER)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  award     Award           @relation(fields: [awardId], references: [id])
+
+  @@index([awardId])
+  @@index([userId])
+  @@map("award_members")
+}
+
+enum AwardMemberRole {
+  MEMBER
+  OWNER
 }
