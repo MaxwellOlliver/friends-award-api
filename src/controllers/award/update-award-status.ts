@@ -47,7 +47,7 @@ export const updateAwardStatus = async (
   ];
 
   if (conditions.some((condition) => condition)) {
-    throw new BadRequest('Invalid award status', 'BAD_REQUEST', {
+    throw new BadRequest('Invalid award status', 'INVALID_STATUS', {
       id,
       currentStatus: award.status,
       providedStatus: status,
@@ -63,5 +63,5 @@ export const updateAwardStatus = async (
     },
   });
 
-  return res.status(200).send(updatedAward);
+  return res.status(200).send({ data: updatedAward, success: true });
 };

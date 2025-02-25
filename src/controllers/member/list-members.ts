@@ -10,7 +10,7 @@ type ListMembersRequest = {
   Querystring: ListRequest;
 };
 
-export const getMembers = async (
+export const listMembers = async (
   req: FastifyRequest<ListMembersRequest>,
   res: FastifyReply,
 ) => {
@@ -19,5 +19,5 @@ export const getMembers = async (
 
   const members = await awardService.getMembers(id, { limit, page });
 
-  return res.status(200).send(members);
+  return res.status(200).send({ data: members, success: true });
 };

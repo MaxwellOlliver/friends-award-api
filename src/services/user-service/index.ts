@@ -9,6 +9,12 @@ export const userService = {
 
     return prisma.user.create({
       data: { ...user, password: hash },
+      select: {
+        id: true,
+        username: true,
+        createdAt: true,
+        updatedAt: true,
+      },
     });
   },
   getUserByUsername: async (username: string) => {
@@ -19,6 +25,12 @@ export const userService = {
   getUserById: async (id: string) => {
     return prisma.user.findUnique({
       where: { id },
+      select: {
+        id: true,
+        username: true,
+        createdAt: true,
+        updatedAt: true,
+      },
     });
   },
   updateUser: async (id: string, user: UpdateUserPayload) => {

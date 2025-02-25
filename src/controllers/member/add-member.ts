@@ -2,7 +2,7 @@ import { FastifyRequest } from 'fastify';
 import { FastifyReply } from 'fastify';
 import { logger } from '../../logger';
 import { awardService } from '../../services/award-service';
-import { Unauthorized } from '../../errors/http-error';
+import { Conflict, Unauthorized } from '../../errors/http-error';
 
 type AddMemberRequest = {
   Params: {
@@ -41,6 +41,14 @@ export const addMember = async (
     );
   }
 
+  const isMember = await awardService.getMember(award.id, userId);
+
+  if (isMember) {
+    throw new Conflict('User is already a member of this award', 'IS_MEMBER', {
+      userId,
+    });
+  }
+
   await awardService.addMember({
     awardId: award.id,
     userId,
@@ -53,5 +61,5 @@ export const addMember = async (
     },
   });
 
-  return res.status(201).send();
+  return res.status(201).send({ data: null, success: true });
 };

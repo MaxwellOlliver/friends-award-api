@@ -22,7 +22,6 @@ export default function userRoutes(fastify: FastifyInstance) {
   fastify.post(
     '/users',
     {
-      preHandler: [fastify.auth],
       schema: userRoutesSchemas.CREATE_USER,
     },
     controller.createUser,

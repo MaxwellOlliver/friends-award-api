@@ -4,7 +4,18 @@ import * as controller from '../controllers/auth';
 export default function authRoutes(fastify: FastifyInstance) {
   fastify.post('/auth/login', controller.login);
 
-  fastify.addHook('preHandler', fastify.auth);
-  fastify.post('/auth/refresh-token', controller.refreshToken);
-  fastify.post('/auth/logout', controller.logout);
+  fastify.post(
+    '/auth/refresh-token',
+    {
+      preHandler: [fastify.auth],
+    },
+    controller.refreshToken,
+  );
+  fastify.post(
+    '/auth/logout',
+    {
+      preHandler: [fastify.auth],
+    },
+    controller.logout,
+  );
 }

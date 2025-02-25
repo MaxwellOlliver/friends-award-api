@@ -33,5 +33,5 @@ export const login = async (
       sameSite: 'strict',
       maxAge: 2 * 24 * 60 * 60, // 10 days
     })
-    .send({ token });
+    .send({ data: { token }, success: true });
 };

@@ -20,5 +20,5 @@ export const getUser = async (
     });
   }
 
-  return reply.status(200).send(user);
+  return reply.status(200).send({ data: user, success: true });
 };

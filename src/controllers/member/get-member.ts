@@ -18,5 +18,5 @@ export const getMember = async (
 
   const member = await awardService.getMember(id, userId);
 
-  return res.status(200).send(member);
+  return res.status(200).send({ data: member, success: true });
 };

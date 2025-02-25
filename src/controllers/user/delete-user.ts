@@ -17,5 +17,5 @@ export const deleteUser = async (
     sameSite: 'strict',
   });
 
-  return reply.status(204).send();
+  return reply.status(204).send({ data: null, success: true });
 };

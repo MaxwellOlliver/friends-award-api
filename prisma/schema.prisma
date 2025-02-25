@@ -9,12 +9,13 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  username  String   @unique
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  Awards    Award[]
+  id          String        @id @default(uuid())
+  username    String        @unique
+  password    String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  Awards      Award[]
+  AwardMember AwardMember[]
 
   @@index([username])
   @@map("users")
@@ -30,8 +31,10 @@ model Award {
   owner       User          @relation(fields: [createdBy], references: [id])
   status      AwardStatus   @default(WAITING)
   members     AwardMember[]
+  inviteCode  String        @unique
 
   @@index([createdBy])
+  @@index([inviteCode])
   @@map("awards")
 }
 
@@ -41,7 +44,8 @@ model AwardMember {
   role      AwardMemberRole @default(MEMBER)
   createdAt DateTime        @default(now())
   updatedAt DateTime        @updatedAt
-  award     Award           @relation(fields: [awardId], references: [id])
+  award     Award           @relation(fields: [awardId], references: [id], onDelete: Cascade)
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([awardId, userId])
   @@index([awardId])

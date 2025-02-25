@@ -5,6 +5,6 @@ export interface ListRequest {
 }
 
 export interface ListResponse<T> {
-  data: T[];
+  items: T[];
   total: number;
 }

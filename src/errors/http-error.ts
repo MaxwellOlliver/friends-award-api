@@ -14,6 +14,7 @@ export class HttpError extends Error {
     message: string,
     public code?: string,
     public details?: Record<string, unknown>,
+    public success = false,
   ) {
     super(message);
   }

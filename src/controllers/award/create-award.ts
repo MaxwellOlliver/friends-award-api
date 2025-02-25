@@ -45,5 +45,5 @@ export const createAward = async (
     role: AwardMemberRole.OWNER,
   });
 
-  return res.status(201).send(award);
+  return res.status(201).send({ data: award, success: true });
 };

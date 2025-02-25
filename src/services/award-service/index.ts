@@ -1,10 +1,15 @@
 import { AwardMemberRole } from '@prisma/client';
 import { prisma } from '../../plugins/prisma.plugin';
 import { AwardService } from './types';
+import crypto from 'crypto';
 
 export const awardService: AwardService = {
   createAward: async (payload) => {
-    const award = await prisma.award.create({ data: payload });
+    const inviteCode = crypto.randomBytes(4).toString('hex');
+
+    const award = await prisma.award.create({
+      data: { ...payload, inviteCode },
+    });
 
     return award;
   },
@@ -57,7 +62,7 @@ export const awardService: AwardService = {
     });
 
     return {
-      data: awards,
+      items: awards,
       total,
     };
   },
@@ -82,6 +87,14 @@ export const awardService: AwardService = {
       where: { awardId },
       skip: (pagination.page - 1) * pagination.limit,
       take: pagination.limit,
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+          },
+        },
+      },
     });
 
     const total = await prisma.awardMember.count({
@@ -89,7 +102,7 @@ export const awardService: AwardService = {
     });
 
     return {
-      data: members,
+      items: members,
       total,
     };
   },
@@ -101,6 +114,19 @@ export const awardService: AwardService = {
           userId,
         },
       },
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+          },
+        },
+      },
+    });
+  },
+  getAwardByInviteCode: async (inviteCode) => {
+    return prisma.award.findUnique({
+      where: { inviteCode },
     });
   },
 };

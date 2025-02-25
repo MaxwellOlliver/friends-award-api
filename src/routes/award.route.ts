@@ -36,52 +36,11 @@ export default function awardRoutes(fastify: FastifyInstance) {
     controller.deleteAward,
   );
 
-  fastify.put(
+  fastify.patch(
     '/awards/:id/status',
     {
       schema: awardRoutesSchemas.UPDATE_AWARD_STATUS,
     },
     controller.updateAwardStatus,
-  );
-
-  // Members
-  fastify.post(
-    '/awards/:id/members',
-    {
-      schema: awardRoutesSchemas.ADD_MEMBER,
-    },
-    controller.addMember,
-  );
-
-  fastify.delete(
-    '/awards/:id/members/:userId',
-    {
-      schema: awardRoutesSchemas.REMOVE_MEMBER,
-    },
-    controller.removeMember,
-  );
-
-  fastify.get(
-    '/awards/:id/members',
-    {
-      schema: awardRoutesSchemas.GET_MEMBERS,
-    },
-    controller.getMembers,
-  );
-
-  fastify.get(
-    '/awards/:id/members/:userId',
-    {
-      schema: awardRoutesSchemas.GET_MEMBER,
-    },
-    controller.getMember,
-  );
-
-  fastify.delete(
-    '/awards/:id/members/:userId',
-    {
-      schema: awardRoutesSchemas.REMOVE_MEMBER,
-    },
-    controller.removeMember,
   );
 }

@@ -8,5 +8,5 @@ export const logout = async (request: FastifyRequest, reply: FastifyReply) => {
     sameSite: 'strict',
   });
 
-  return reply.status(204).send();
+  return reply.status(204).send({ data: null, success: true });
 };

@@ -7,7 +7,10 @@ export const getLoggedUser = async (
   request: FastifyRequest,
   reply: FastifyReply,
 ) => {
-  logger.info(`Getting logged user: ${request.user.sub}`);
+  logger.info({
+    msg: `Getting logged user: ${request.user.sub}`,
+    trace: { id: request.headers['x-trace-id'] },
+  });
 
   const user = await userService.getUserById(request.user.sub);
 
@@ -17,5 +20,5 @@ export const getLoggedUser = async (
     });
   }
 
-  return reply.status(200).send(user);
+  return reply.status(200).send({ data: user, success: true });
 };

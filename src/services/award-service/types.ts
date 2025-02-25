@@ -52,4 +52,5 @@ export interface AwardService {
     pagination: ListRequest,
   ) => Promise<ListResponse<AwardMember>>;
   getMember: (awardId: string, userId: string) => Promise<AwardMember | null>;
+  getAwardByInviteCode: (inviteCode: string) => Promise<Award | null>;
 }

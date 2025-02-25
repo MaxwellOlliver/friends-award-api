@@ -10,7 +10,14 @@ export const createUser = async (
 ) => {
   const { username, password } = request.body;
 
-  logger.info(`Checking if user ${username} exists`);
+  const traceId = request.headers['x-trace-id'];
+
+  logger.info({
+    msg: `Checking if user ${username} exists`,
+    trace: {
+      id: traceId,
+    },
+  });
 
   const userExists = await userService.getUserByUsername(username);
 
@@ -20,5 +27,5 @@ export const createUser = async (
 
   const user = await userService.createUser({ username, password });
 
-  return reply.status(201).send(user);
+  return reply.status(201).send({ data: user, success: true });
 };

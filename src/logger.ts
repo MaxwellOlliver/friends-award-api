@@ -10,6 +10,7 @@ const stream = pinoElastic({
 
 export const logger = pino(
   {
+    level: 'info',
     serializers: {
       res: (res) => {
         return {
@@ -24,7 +25,9 @@ export const logger = pino(
         return {
           method: req.method,
           url: req.url,
-          body: req.body,
+          body: req.url.includes('/login')
+            ? { username: req.body.username }
+            : req.body,
           query: req.query,
           params: req.params,
           ip: req.ip,
@@ -60,16 +63,27 @@ export const setupLogger = (server: FastifyInstance) => {
     done();
   });
 
-  server.addHook('onResponse', (request, response, done) => {
-    request.log.info({
+  server.addHook('onSend', (request, response, payload, done) => {
+    const logData = {
       msg: `RESPONSE: ${request.method} ${response.statusCode} ${request.url}`,
-      res: response,
+      res: {
+        statusCode: response.statusCode,
+        url: request.url,
+        method: request.method,
+        body: payload,
+      },
       responseTime: response.elapsedTime,
       trace: {
         id: request.headers['x-trace-id'],
       },
-    });
+    };
 
-    done();
+    if (response.statusCode >= 400) {
+      request.log.error(logData);
+    } else {
+      request.log.info(logData);
+    }
+
+    done(null, payload);
   });
 };

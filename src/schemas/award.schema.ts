@@ -1,5 +1,4 @@
 import S from 'fluent-json-schema';
-import { Schema } from '../types/schema';
 import { paginationSchema } from './pagination.schema';
 import { AwardStatus } from '@prisma/client';
 
@@ -7,7 +6,7 @@ const awardSchema = S.object()
   .prop('name', S.string().required())
   .prop('description', S.string().required());
 
-export const awardRoutesSchemas: Schema = {
+export const awardRoutesSchemas = {
   GET_AWARD_BY_ID: {
     params: S.object().prop('id', S.string()),
   },
@@ -43,5 +42,8 @@ export const awardRoutesSchemas: Schema = {
   },
   GET_MEMBER: {
     params: S.object().prop('id', S.string()).prop('userId', S.string()),
+  },
+  ADD_MEMBER_WITH_INVITE_CODE: {
+    params: S.object().prop('inviteCode', S.string()),
   },
 };

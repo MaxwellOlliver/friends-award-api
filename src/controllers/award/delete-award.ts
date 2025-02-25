@@ -32,7 +32,7 @@ export const deleteAward = async (
   if (!award) {
     throw new Unauthorized(
       'You are not allowed to delete this award',
-      'UNAUTHORIZED',
+      'NOT_ALLOWED',
       {
         id,
       },
@@ -48,5 +48,5 @@ export const deleteAward = async (
     },
   });
 
-  return res.status(204).send();
+  return res.status(204).send({ data: null, success: true });
 };

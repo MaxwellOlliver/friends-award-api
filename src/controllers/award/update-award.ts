@@ -41,5 +41,5 @@ export const updateAward = async (
     },
   });
 
-  return res.status(200).send(award);
+  return res.status(200).send({ data: award, success: true });
 };

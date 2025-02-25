@@ -34,7 +34,7 @@ export const removeMember = async (
   if (!member || member.role !== AwardMemberRole.OWNER) {
     throw new Unauthorized(
       'You are not allowed to remove a member from this award',
-      'UNAUTHORIZED',
+      'NOT_ALLOWED',
       { id: awardId },
     );
   }
@@ -48,5 +48,5 @@ export const removeMember = async (
     },
   });
 
-  return res.status(204).send();
+  return res.status(204).send({ data: null, success: true });
 };

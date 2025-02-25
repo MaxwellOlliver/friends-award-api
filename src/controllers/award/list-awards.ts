@@ -22,5 +22,5 @@ export const listAwards = async (
     q,
   });
 
-  return res.status(200).send(awards);
+  return res.status(200).send({ data: awards, success: true });
 };
