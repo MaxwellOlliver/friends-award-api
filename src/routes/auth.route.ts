@@ -1,10 +1,10 @@
 import { FastifyInstance } from 'fastify';
-import { authController } from '../controllers/auth.controller';
+import * as controller from '../controllers/auth';
 
 export default function authRoutes(fastify: FastifyInstance) {
-  const controller = authController(fastify);
-
   fastify.post('/auth/login', controller.login);
+
+  fastify.addHook('preHandler', fastify.auth);
   fastify.post('/auth/refresh-token', controller.refreshToken);
   fastify.post('/auth/logout', controller.logout);
 }

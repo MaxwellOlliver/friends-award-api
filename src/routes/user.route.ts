@@ -1,10 +1,8 @@
 import { FastifyInstance } from 'fastify';
-import { userController } from '../controllers/user.controller';
 import { userRoutesSchemas } from '../schemas/user.schema';
+import * as controller from '../controllers/user';
 
 export default function userRoutes(fastify: FastifyInstance) {
-  const controller = userController(fastify);
-
   fastify.get(
     '/users/:id',
     {
