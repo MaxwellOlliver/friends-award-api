@@ -61,4 +61,46 @@ export const awardService: AwardService = {
       total,
     };
   },
+  updateAwardStatus: async (awardId, status) => {
+    return prisma.award.update({
+      where: { id: awardId },
+      data: { status },
+    });
+  },
+  addMember: async (payload) => {
+    return prisma.awardMember.create({
+      data: payload,
+    });
+  },
+  removeMember: async (awardId, userId) => {
+    await prisma.awardMember.delete({
+      where: { awardId_userId: { awardId, userId } },
+    });
+  },
+  getMembers: async (awardId, pagination) => {
+    const members = await prisma.awardMember.findMany({
+      where: { awardId },
+      skip: (pagination.page - 1) * pagination.limit,
+      take: pagination.limit,
+    });
+
+    const total = await prisma.awardMember.count({
+      where: { awardId },
+    });
+
+    return {
+      data: members,
+      total,
+    };
+  },
+  getMember: async (awardId, userId) => {
+    return prisma.awardMember.findUnique({
+      where: {
+        awardId_userId: {
+          awardId,
+          userId,
+        },
+      },
+    });
+  },
 };

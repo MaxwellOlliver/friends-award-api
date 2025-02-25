@@ -1,22 +1,20 @@
 import { FastifyInstance } from 'fastify';
-import { awardController } from '../controllers/award.controller';
 import { awardRoutesSchemas } from '../schemas/award.schema';
+import * as controller from '../controllers/award';
 
 export default function awardRoutes(fastify: FastifyInstance) {
-  const controller = awardController(fastify);
+  fastify.addHook('preHandler', fastify.auth);
 
   fastify.get(
     '/awards',
     {
-      preHandler: [fastify.auth],
       schema: awardRoutesSchemas.GET_AWARDS,
     },
-    controller.getAwards,
+    controller.listAwards,
   );
   fastify.get(
     '/awards/:id',
     {
-      preHandler: [fastify.auth],
       schema: awardRoutesSchemas.GET_AWARD_BY_ID,
     },
     controller.getAward,
@@ -25,7 +23,6 @@ export default function awardRoutes(fastify: FastifyInstance) {
   fastify.post(
     '/awards',
     {
-      preHandler: [fastify.auth],
       schema: awardRoutesSchemas.CREATE_AWARD,
     },
     controller.createAward,
@@ -34,9 +31,57 @@ export default function awardRoutes(fastify: FastifyInstance) {
   fastify.delete(
     '/awards/:id',
     {
-      preHandler: [fastify.auth],
       schema: awardRoutesSchemas.DELETE_AWARD,
     },
     controller.deleteAward,
+  );
+
+  fastify.put(
+    '/awards/:id/status',
+    {
+      schema: awardRoutesSchemas.UPDATE_AWARD_STATUS,
+    },
+    controller.updateAwardStatus,
+  );
+
+  // Members
+  fastify.post(
+    '/awards/:id/members',
+    {
+      schema: awardRoutesSchemas.ADD_MEMBER,
+    },
+    controller.addMember,
+  );
+
+  fastify.delete(
+    '/awards/:id/members/:userId',
+    {
+      schema: awardRoutesSchemas.REMOVE_MEMBER,
+    },
+    controller.removeMember,
+  );
+
+  fastify.get(
+    '/awards/:id/members',
+    {
+      schema: awardRoutesSchemas.GET_MEMBERS,
+    },
+    controller.getMembers,
+  );
+
+  fastify.get(
+    '/awards/:id/members/:userId',
+    {
+      schema: awardRoutesSchemas.GET_MEMBER,
+    },
+    controller.getMember,
+  );
+
+  fastify.delete(
+    '/awards/:id/members/:userId',
+    {
+      schema: awardRoutesSchemas.REMOVE_MEMBER,
+    },
+    controller.removeMember,
   );
 }

@@ -1,6 +1,7 @@
 import S from 'fluent-json-schema';
 import { Schema } from '../types/schema';
 import { paginationSchema } from './pagination.schema';
+import { AwardStatus } from '@prisma/client';
 
 const awardSchema = S.object()
   .prop('name', S.string().required())
@@ -21,5 +22,26 @@ export const awardRoutesSchemas: Schema = {
   },
   DELETE_AWARD: {
     params: S.object().prop('id', S.string()),
+  },
+  UPDATE_AWARD_STATUS: {
+    params: S.object().prop('id', S.string()),
+    body: S.object().prop(
+      'status',
+      S.string().enum(Object.values(AwardStatus)),
+    ),
+  },
+  ADD_MEMBER: {
+    params: S.object().prop('id', S.string()),
+    body: S.object().prop('userId', S.string()),
+  },
+  REMOVE_MEMBER: {
+    params: S.object().prop('id', S.string()),
+  },
+  LIST_MEMBERS: {
+    params: S.object().prop('id', S.string()),
+    querystring: paginationSchema,
+  },
+  GET_MEMBER: {
+    params: S.object().prop('id', S.string()).prop('userId', S.string()),
   },
 };
