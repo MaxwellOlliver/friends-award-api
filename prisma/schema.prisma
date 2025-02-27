@@ -22,16 +22,17 @@ model User {
 }
 
 model Award {
-  id          String        @id @default(uuid())
-  name        String
-  description String
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  createdBy   String
-  owner       User          @relation(fields: [createdBy], references: [id])
-  status      AwardStatus   @default(WAITING)
-  members     AwardMember[]
-  inviteCode  String        @unique
+  id            String          @id @default(uuid())
+  name          String
+  description   String
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  createdBy     String
+  owner         User            @relation(fields: [createdBy], references: [id])
+  status        AwardStatus     @default(WAITING)
+  members       AwardMember[]
+  inviteCode    String          @unique
+  AwardCategory AwardCategory[]
 
   @@index([createdBy])
   @@index([inviteCode])
@@ -62,4 +63,28 @@ enum AwardStatus {
   WAITING
   VOTING
   FINISHED
+}
+
+model Category {
+  id            String          @id @default(uuid())
+  name          String
+  description   String
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  AwardCategory AwardCategory[]
+
+  @@index([name])
+  @@map("categories")
+}
+
+model AwardCategory {
+  awardId    String
+  categoryId String
+  award      Award    @relation(fields: [awardId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([awardId, categoryId])
+  @@index([awardId])
+  @@index([categoryId])
+  @@map("award_categories")
 }
