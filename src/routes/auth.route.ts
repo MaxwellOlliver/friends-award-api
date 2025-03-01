@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import * as controller from '../controllers/auth';
+import * as controller from '../controllers/auth-controller';
 
 export default function authRoutes(fastify: FastifyInstance) {
   fastify.post('/auth/login', controller.login);

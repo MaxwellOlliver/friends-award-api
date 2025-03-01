@@ -9,30 +9,32 @@ datasource db {
 }
 
 model User {
-  id          String        @id @default(uuid())
-  username    String        @unique
-  password    String
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  Awards      Award[]
-  AwardMember AwardMember[]
+  id           String        @id @default(uuid())
+  username     String        @unique
+  password     String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  awards       Award[]
+  awardMembers AwardMember[]
+  Category     Category[]
 
   @@index([username])
   @@map("users")
 }
 
 model Award {
-  id            String          @id @default(uuid())
-  name          String
-  description   String
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
-  createdBy     String
-  owner         User            @relation(fields: [createdBy], references: [id])
-  status        AwardStatus     @default(WAITING)
-  members       AwardMember[]
-  inviteCode    String          @unique
-  AwardCategory AwardCategory[]
+  id                String            @id @default(uuid())
+  name              String
+  description       String
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  createdBy         String
+  owner             User              @relation(fields: [createdBy], references: [id])
+  status            AwardStatus       @default(WAITING)
+  members           AwardMember[]
+  inviteCode        String            @unique
+  awardCategories   AwardCategory[]
+  nomineeCategories NomineeCategory[]
 
   @@index([createdBy])
   @@index([inviteCode])
@@ -66,12 +68,17 @@ enum AwardStatus {
 }
 
 model Category {
-  id            String          @id @default(uuid())
-  name          String
-  description   String
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
-  AwardCategory AwardCategory[]
+  id                String            @id @default(uuid())
+  name              String
+  description       String
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  public            Boolean           @default(false)
+  createdBy         String
+  tags              String[]
+  creator           User              @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+  awardCategories   AwardCategory[]
+  nomineeCategories NomineeCategory[]
 
   @@index([name])
   @@map("categories")
@@ -87,4 +94,30 @@ model AwardCategory {
   @@index([awardId])
   @@index([categoryId])
   @@map("award_categories")
+}
+
+model Nominee {
+  id                String            @id @default(uuid())
+  name              String
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  nomineeCategories NomineeCategory[]
+
+  @@index([name])
+  @@map("nominees")
+}
+
+model NomineeCategory {
+  nomineeId  String
+  categoryId String
+  awardId    String
+  nominee    Nominee  @relation(fields: [nomineeId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  award      Award    @relation(fields: [awardId], references: [id], onDelete: Cascade)
+
+  @@id([nomineeId, categoryId, awardId])
+  @@index([nomineeId])
+  @@index([categoryId])
+  @@index([awardId])
+  @@map("nominee_categories")
 }

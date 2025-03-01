@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import { awardRoutesSchemas } from '../schemas/award.schema';
-import * as controller from '../controllers/award';
+import * as controller from '../controllers/award-controller';
 
 export default function awardRoutes(fastify: FastifyInstance) {
   fastify.addHook('preHandler', fastify.auth);

@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import { userRoutesSchemas } from '../schemas/user.schema';
-import * as controller from '../controllers/user';
+import * as controller from '../controllers/user-controller';
 
 export default function userRoutes(fastify: FastifyInstance) {
   fastify.get(

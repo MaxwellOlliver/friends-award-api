@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import { memberRoutesSchemas } from '../schemas/member.schema';
-import * as controller from '../controllers/member';
+import * as controller from '../controllers/member-controller';
 
 export default function memberRoutes(fastify: FastifyInstance) {
   fastify.addHook('preHandler', fastify.auth);
