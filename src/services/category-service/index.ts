@@ -14,8 +14,14 @@ export const categoryService: CategoryService = {
   deleteCategory: async (categoryId) => {
     await prisma.category.delete({ where: { id: categoryId } });
   },
-  getCategory: async (categoryId) => {
-    return prisma.category.findUnique({ where: { id: categoryId } });
+  getCategory: async (criteria, include) => {
+    return prisma.category.findUnique({
+      where: {
+        id: criteria.id,
+        createdBy: criteria.createdBy,
+      },
+      include,
+    });
   },
   getAwardCategories: async (awardId) => {
     const awardCategories = await prisma.awardCategory.findMany({
@@ -29,6 +35,7 @@ export const categoryService: CategoryService = {
     const categories = await prisma.category.findMany({
       where: {
         public: true,
+        name: { contains: pagination.q, mode: 'insensitive' },
       },
       skip: (pagination.page - 1) * pagination.limit,
       take: pagination.limit,

@@ -75,7 +75,7 @@ model Category {
   updatedAt         DateTime          @updatedAt
   public            Boolean           @default(false)
   createdBy         String
-  tags              String[]
+  tags              String[]          @default([])
   creator           User              @relation(fields: [createdBy], references: [id], onDelete: Cascade)
   awardCategories   AwardCategory[]
   nomineeCategories NomineeCategory[]

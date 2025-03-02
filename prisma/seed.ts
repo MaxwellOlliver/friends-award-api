@@ -13,14 +13,14 @@ async function main() {
 
   let fwaUser = await prisma.user.findUnique({
     where: {
-      username: 'Friends Awards',
+      username: 'FriendsAwards',
     },
   });
 
   if (!fwaUser) {
     fwaUser = await prisma.user.create({
       data: {
-        username: 'Friends Awards',
+        username: 'FriendsAwards',
         password: encryptedPassword,
       },
     });

@@ -2,6 +2,7 @@ import { ListResponse } from '../../types/pagination';
 
 import {
   Award,
+  AwardCategory,
   AwardMember,
   AwardMemberRole,
   AwardStatus,
@@ -53,4 +54,5 @@ export interface AwardService {
   ) => Promise<ListResponse<AwardMember>>;
   getMember: (awardId: string, userId: string) => Promise<AwardMember | null>;
   getAwardByInviteCode: (inviteCode: string) => Promise<Award | null>;
+  addCategory: (awardId: string, categoryId: string) => Promise<AwardCategory>;
 }
