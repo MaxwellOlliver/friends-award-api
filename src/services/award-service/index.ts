@@ -129,4 +129,12 @@ export const awardService: AwardService = {
       where: { inviteCode },
     });
   },
+  addCategory: async (awardId, categoryId) => {
+    return prisma.awardCategory.create({
+      data: {
+        awardId,
+        categoryId,
+      },
+    });
+  },
 };

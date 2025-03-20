@@ -1,9 +1,11 @@
-import { AwardCategory, Category } from '@prisma/client';
+import { AwardCategory, Category, Prisma } from '@prisma/client';
 import { ListRequest, ListResponse } from '../../types/pagination';
+import { RequireAtLeastOne } from '../../utils/util-types';
 
 export interface CreateCategoryPayload {
   name: string;
   description: string;
+  createdBy: string;
 }
 
 export interface UpdateCategoryPayload {
@@ -37,7 +39,10 @@ export interface CategoryService {
     payload: UpdateCategoryPayload,
   ) => Promise<Category>;
   deleteCategory: (categoryId: string) => Promise<void>;
-  getCategory: (categoryId: string) => Promise<Category | null>;
+  getCategory: (
+    criteria: RequireAtLeastOne<{ id: string; createdBy: string }>,
+    include?: Prisma.CategoryInclude,
+  ) => Promise<Category | null>;
   getAwardCategories: (awardId: string) => Promise<Category[]>;
   getPublicCategories: (
     pagination: ListRequest,
